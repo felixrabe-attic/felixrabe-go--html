@@ -3,6 +3,7 @@ package html
 import (
 	"bytes"
 	"io"
+	"net/http"
 	"strings"
 
 	"golang.org/x/net/html"
@@ -19,4 +20,17 @@ func ParseBytes(b []byte) (*Node, error) {
 
 func ParseString(s string) (*Node, error) {
 	return Parse(strings.NewReader(s))
+}
+
+func ParseUrl(url string) (*Node, error) {
+	r, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer r.Body.Close()
+	doc, err := Parse(r.Body)
+	if err != nil {
+		return nil, err
+	}
+	return doc, nil
 }
