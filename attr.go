@@ -13,3 +13,12 @@ func (node *Node) RemoveAttr(key string) {
 	}
 	node.Attr = newAttr
 }
+
+func (node *Node) GetAttr(key string) string {
+	for _, a := range node.Attr {
+		if a.Namespace == "" && a.Key == key {
+			return a.Val
+		}
+	}
+	return ""
+}
